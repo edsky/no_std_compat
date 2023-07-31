@@ -16,6 +16,12 @@ pub mod array {
 pub mod ascii {
     pub use __core::ascii::*;
 }
+pub mod asserting {
+    #[cfg(feature = "unstable")] pub use __core::asserting::*;
+}
+pub mod async_iter {
+    #[cfg(feature = "unstable")] pub use __core::async_iter::*;
+}
 pub mod borrow {
     pub use __core::borrow::*;
     #[cfg(feature = "alloc")] pub use __alloc::borrow::*;
@@ -46,6 +52,9 @@ pub mod convert {
 pub mod default {
     pub use __core::default::*;
 }
+pub mod error {
+    #[cfg(feature = "unstable")] pub use __core::error::*;
+}
 pub mod f32 {
     pub use __core::f32::*;
 }
@@ -54,6 +63,7 @@ pub mod f64 {
 }
 pub mod ffi {
     pub use __core::ffi::*;
+    #[cfg(feature = "alloc")] pub use __alloc::ffi::*;
 }
 pub mod fmt {
     pub use __core::fmt::*;
@@ -92,14 +102,14 @@ pub mod isize {
 pub mod iter {
     pub use __core::iter::*;
 }
-pub mod lazy {
-    #[cfg(feature = "unstable")] pub use __core::lazy::*;
-}
 pub mod marker {
     pub use __core::marker::*;
 }
 pub mod mem {
     pub use __core::mem::*;
+}
+pub mod net {
+    #[cfg(feature = "unstable")] pub use __core::net::*;
 }
 pub mod num {
     pub use __core::num::*;
@@ -111,7 +121,7 @@ pub mod option {
     pub use __core::option::*;
 }
 pub mod panic {
-    #[cfg(feature = "unstable")] pub use __core::panic::*;
+    pub use __core::panic::*;
 }
 pub mod panicking {
     #[cfg(feature = "unstable")] pub use __core::panicking::*;
@@ -123,9 +133,7 @@ pub mod prelude {
     pub mod v1 {
         // Prelude
         pub use __core::prelude::v1::*;
-        #[cfg(all(feature = "alloc", feature = "unstable"))]
-        pub use __alloc::prelude::v1::*;
-        #[cfg(all(feature = "alloc", not(feature = "unstable")))]
+        #[cfg(feature = "alloc")]
         pub use __alloc::{
             borrow::ToOwned,
             boxed::Box,
@@ -147,12 +155,6 @@ pub mod primitive {
 }
 pub mod ptr {
     pub use __core::ptr::*;
-}
-pub mod raw {
-    #[cfg(feature = "unstable")] pub use __core::raw::*;
-}
-pub mod raw_vec {
-    #[cfg(all(feature = "alloc", feature = "unstable"))] pub use __alloc::raw_vec::*;
 }
 pub mod rc {
     #[cfg(feature = "alloc")] pub use __alloc::rc::*;
@@ -183,7 +185,7 @@ pub mod sync {
 }
 pub mod task {
     pub use __core::task::*;
-    #[cfg(all(feature = "alloc", feature = "unstable", not(target_os = "none")))] pub use __alloc::task::*;
+    #[cfg(all(feature = "alloc", not(target_os = "none")))] pub use __alloc::task::*;
 }
 pub mod time {
     pub use __core::time::*;

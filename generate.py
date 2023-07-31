@@ -36,8 +36,7 @@ if args.src is None:
 # Read files
 
 modules_regex = re.compile(
-    r"^(?:\S.*)?pub\s+(?:mod\s+|use\s+(?:[a-zA-Z_][a-zA-Z0-9_]*::)*)"
-    r"([a-zA-Z_][a-zA-Z0-9_]*);",
+    r"(?:#\s*\[path\s*=\s*\"(.*?)\"\]\s*)?pub\s+mod\s+([a-zA-Z_][a-zA-Z0-9_]*);",
     re.MULTILINE
 )
 
@@ -53,14 +52,14 @@ def modules(crate):
 
     modules = dict()
     for match in modules_regex.finditer(contents):
-        module = match.group(1)
+        module = match.group(2)
         unstable = False
 
-        path = os.path.join(root, module + ".rs")
+        path = os.path.join(root, match.group(1)) if match.group(1) else os.path.join(root, module + ".rs")
         if not os.path.isfile(path):
             path = os.path.join(root, module, "mod.rs")
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding='utf-8') as f:
                 unstable = "#![unstable" in f.read()
                 if unstable:
                     print(
@@ -139,7 +138,7 @@ core = modules("core")
 alloc = modules("alloc")
 
 # Module overrides
-core["lazy"].unstable = True
+# core["lazy"].unstable = True
 alloc["sync"].cfgs.append("not(target_os = \"none\")")
 alloc["task"].cfgs.append("not(target_os = \"none\")")
 
